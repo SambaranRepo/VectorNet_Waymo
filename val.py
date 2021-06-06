@@ -28,7 +28,7 @@ if __name__ == '__main__':
                         help = 'The path that stores the validation set of tf.Example format data')
     parser.add_argument('--batch_size',
                         type = int,
-                        default = 2,
+                        default = 1,
                         help = 'The batch size of dataloader')
     parser.add_argument('--num_epochs',
                         type = int,
@@ -108,9 +108,9 @@ if __name__ == '__main__':
                 decoded_traj, decoded_probs = decoder(target_features)
                 ground_truth = targets[s,agent_inds,0:T,0:2]
                 ground_truth_mask = targets_mask[s,agent_inds,0:T]
-                min_ADE_metric+=min_K_joint_ADE_metric(decoded_traj,ground_truth)
+                min_ADE_metric+=min_K_joint_ADE_metric(decoded_traj,ground_truth,ground_truth_mask)
                 min_ADE_metric/=parameters['batch_size']
             print("MIN_ADE for this batch was {}".format(min_ADE_metric))
             MIN_ADE+=min_ADE_metric
-    MIN_ADE/75
+    MIN_ADE/150
     print("Total min_ade error is : {}".format(MIN_ADE))
