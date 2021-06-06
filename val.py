@@ -34,12 +34,17 @@ if __name__ == '__main__':
                         type = int,
                         default = 1,
                         help = 'The batch size of dataloader')
+    parser.add_argument('--num_scenes',
+                        type = int,
+                        default = 50,
+                        help = 'Number of scenes to load for validation')
 
     parameters = {}
     args = parser.parse_args()
     val_path_ = os.path.expanduser(args.val_path)
     parameters['batch_size'] = args.batch_size
     parameters['num_epochs'] = args.num_epochs
+    parameters['num_scenes'] = args.num_scenes
 
     use_cuda = torch.cuda.is_available()
     if use_cuda:
@@ -51,7 +56,7 @@ if __name__ == '__main__':
         extras = {"num_workers": len(os.sched_getaffinity(0)), "pin_memory": False}
         print("CUDA NOT supported")
 
-    val_dataset = waymo_motion_dataset(dataroot = val_path_, scene_list = range(150))
+    val_dataset = waymo_motion_dataset(dataroot = val_path_, scene_list = range(parameters['num_scenes']))
     val_loader = DataLoader(dataset = val_dataset,
                               batch_size = parameters['batch_size'],
                               shuffle = True,
@@ -112,5 +117,5 @@ if __name__ == '__main__':
                 min_ADE_metric/=parameters['batch_size']
             print("MIN_ADE for this batch was {}".format(min_ADE_metric))
             MIN_ADE+=min_ADE_metric
-    MIN_ADE/150
+    MIN_ADE/(parameters['num_sceness']/parameters['batch_size'])
     print("Total min_ade error is : {}".format(MIN_ADE))
