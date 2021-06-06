@@ -1,3 +1,4 @@
+import torch
 # pos_preds is (N_actors, N_modes, T, 2)
 # probs is (N_modes)
 # GT is (N_actors, T, 2)
