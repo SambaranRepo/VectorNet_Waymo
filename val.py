@@ -51,7 +51,7 @@ if __name__ == '__main__':
         extras = {"num_workers": len(os.sched_getaffinity(0)), "pin_memory": False}
         print("CUDA NOT supported")
 
-    val_dataset = waymo_motion_dataset(dataroot = val_path_, scene_list = range(100))
+    val_dataset = waymo_motion_dataset(dataroot = val_path_, scene_list = range(150))
     val_loader = DataLoader(dataset = val_dataset,
                               batch_size = parameters['batch_size'],
                               shuffle = True,
@@ -111,3 +111,6 @@ if __name__ == '__main__':
                 min_ADE_metric+=min_K_joint_ADE_metric(decoded_traj,ground_truth)
                 min_ADE_metric/=parameters['batch_size']
             print("MIN_ADE for this batch was {}".format(min_ADE_metric))
+            MIN_ADE+=min_ADE_metric
+    MIN_ADE/75
+    print("Total min_ade error is : {}".format(MIN_ADE))
