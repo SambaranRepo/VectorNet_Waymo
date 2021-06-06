@@ -117,5 +117,5 @@ if __name__ == '__main__':
                 min_ADE_metric/=parameters['batch_size']
             print("MIN_ADE for this batch was {}".format(min_ADE_metric))
             MIN_ADE+=min_ADE_metric
-    MIN_ADE/(parameters['num_sceness']/parameters['batch_size'])
+    MIN_ADE/(parameters['num_scenes']/parameters['batch_size'])
     print("Total min_ade error is : {}".format(MIN_ADE))
