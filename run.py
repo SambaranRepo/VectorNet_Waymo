@@ -64,7 +64,7 @@ if __name__ == '__main__':
         extras = {"num_workers": len(os.sched_getaffinity(0)), "pin_memory": False}
         print("CUDA NOT supported")
 
-    train_dataset = waymo_motion_dataset(dataroot = train_path_, scene_list = range(20))
+    train_dataset = waymo_motion_dataset(dataroot = train_path_, scene_list = range(100))
     train_loader = DataLoader(dataset = train_dataset,
                               batch_size = parameters['batch_size'],
                               shuffle = False,
@@ -99,7 +99,7 @@ if __name__ == '__main__':
     # Define loss functions, metrics, and optimizer
     loss_fn = multi_mode_loss_L2
 
-    optimizer = torch.optim.Adam(trainable_params,lr = 1e-2)
+    optimizer = torch.optim.Adam(trainable_params,lr = 3e-2)
     
     for epoch in range(parameters['num_epochs']):
         Loss = 0
