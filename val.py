@@ -28,7 +28,7 @@ if __name__ == '__main__':
                         help = 'The path that stores the validation set of tf.Example format data')
     parser.add_argument('--batch_size',
                         type = int,
-                        default = 1,
+                        default = 2,
                         help = 'The batch size of dataloader')
     parser.add_argument('--num_epochs',
                         type = int,
@@ -51,7 +51,7 @@ if __name__ == '__main__':
         extras = {"num_workers": len(os.sched_getaffinity(0)), "pin_memory": False}
         print("CUDA NOT supported")
 
-    val_dataset = waymo_motion_dataset(dataroot = val_path_)
+    val_dataset = waymo_motion_dataset(dataroot = val_path_, scene_list = range(100))
     val_loader = DataLoader(dataset = val_dataset,
                               batch_size = parameters['batch_size'],
                               shuffle = True,
@@ -67,7 +67,7 @@ if __name__ == '__main__':
     # Roadmap vector is 8
     roadmap_subgraph = SubGraph(8, N_hidden)
     # Define global interaction graph
-    global_graph = GNN(2*N_hidden)
+    global_graph = GNN(2*N_hidden,N_hidden)
     
     # Define decoder
     N_modes = 3
@@ -103,7 +103,7 @@ if __name__ == '__main__':
             min_ADE_metric = 0
             # Decode and compute loss scene by scene
             for s in range(parameters['batch_size']):
-                aagent_inds = torch.nonzero(objects_of_interest[s,:]==1, as_tuple=True)[0]
+                agent_inds = torch.nonzero(objects_of_interest[s,:]==1, as_tuple=True)[0]
                 target_features = graph_output[s,agent_inds,:]
                 decoded_traj, decoded_probs = decoder(target_features)
                 ground_truth = targets[s,agent_inds,0:T,0:2]
